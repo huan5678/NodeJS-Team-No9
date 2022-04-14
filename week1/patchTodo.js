@@ -23,10 +23,10 @@ const patchTodo = (req, res, todos, headers) => {
         );
         res.end();
       } else {
-        errHandle(res);
+        errorHandle(res);
       }
     } catch {
-      errHandle(res);
+      errorHandle(res);
     }
   });
 };

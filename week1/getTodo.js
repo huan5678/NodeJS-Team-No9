@@ -1,12 +1,14 @@
-const getTodo = (res, data) => {
-	if ( data ) {
+const getTodo = (res, data, headers) => {
+  if (data) {
+    res.writeHead(200, headers)
 		res.write(
 			JSON.stringify({
 				'status': "Success",
 				'data': data
 			})
 		)
-	} else {
+  } else {
+    res.writeHead(400, headers)
 		res.write(
 			JSON.stringify({
 				'status': "Fail",
