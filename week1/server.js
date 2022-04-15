@@ -3,6 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 const errHandle = require('./errorHandle');
 const getTodo = require('./getTodo');
 const postTodo = require('./postTodo');
+const deleteTodo = require('./deleteTodo');
 const todos = [];
 
 const requestListener = (req, res)=>{
@@ -17,7 +18,7 @@ const requestListener = (req, res)=>{
     req.on('data', chunk=>{
         body += chunk;
     })
-    
+  
     if(req.url=="/todos" && req.method == "GET"){
         // getTodo.js
         getTodo(res, todos);
@@ -26,8 +27,10 @@ const requestListener = (req, res)=>{
         postTodo(req, res, todos);
     }else if(req.url=="/todos" && req.method == "DELETE"){
         // deleteTodo.js
+        deleteTodo.All(req, res, todos);
     }else if(req.url.startsWith("/todos/") && req.method=="DELETE"){
         // deleteTodo.js
+        deleteTodo.One(req, res, todos);
     }else if(req.url.startsWith("/todos/") && req.method=="PATCH"){
         // patchTodo.js
     }else if(req.method == "OPTIONS"){
@@ -45,3 +48,4 @@ const requestListener = (req, res)=>{
 
 const server = http.createServer(requestListener);
 server.listen(process.env.PORT || 3005);
+
