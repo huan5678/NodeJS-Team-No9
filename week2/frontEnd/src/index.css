@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bg-pattern {
+  @apply bg-gray bg-[length:64px_64px];
+  background-image: linear-gradient(#70707050 1px, transparent 1px),
+    linear-gradient(to right, #70707050 1px, #efece7 1px);
+}
+
+.btn {
+  @apply border-2 border-black rounded-lg w-full grid place-content-center py-4 transition-all duration-150;
+}
+.btn:hover {
+  @apply shadow-bottom;
+}
+.btn:active {
+  @apply translate-y-1 shadow-[0px_1px_0px_#000400];
+}
