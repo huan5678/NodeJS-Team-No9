@@ -19,7 +19,7 @@ module.exports = {
         sans: ['Noto Sans TC', ...fontFamily.sans],
         logo: ['Paytone One'],
         mono: ['Azeret Mono', ...fontFamily.mono],
-        num: '"Baloo Da 2, cursive"'
+        num: '"Baloo Da 2, cursive"',
       },
       colors: {
         primary: {
@@ -55,7 +55,7 @@ module.exports = {
         side: '-2px 2px 0px #000400',
         bottom: '0px 3px 0px #000400',
         light: '-8px 8px 0px #00040029',
-        paper: '6px 6px 0px #FFF, 6px 6px 0px 2px #000400'
+        paper: '6px 6px 0px #FFF, 6px 6px 0px 2px #000400',
       },
     },
   },
