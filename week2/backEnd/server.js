@@ -1,7 +1,7 @@
 const http = require('http');
 const mongoose = require('mongoose');
 const {success, error } = require('./utils/handlers');
-require('dotenv').config()
+dotenv.config({path:'./config.env'})
 
 console.log(PORT);
 console.log('hello');
