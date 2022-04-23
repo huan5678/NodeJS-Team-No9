@@ -20,9 +20,33 @@ const requestListener = async (req, res) => {
     });
 
     if( (req.url == '/' || req.url == '/posts') && req.method == 'GET' ){
-        const allPost = PostsModel.find();
-        success(res, allPost);
+        const allPosts = await PostsModel.find();
+        success(res, allPosts);
     }else if(req.url == '/posts' && req.method == 'POST'){
+        req.on('end', async () => {
+            try {
+                const data = JSON.parse(body);
+                const newPost = await PostsModel.create( {
+                    userName: data.userName,
+                    userContent: data.userContent,
+                    userPhoto: data.userPhoto,
+                    imgUrl: data.imgUrl,
+
+                });//end of PostsModel.create()
+                
+                success(res, newPost);
+                console.log(newPost);
+
+            } catch (error) {
+                error(res, "欄位資料不正確!!")
+            }
+        });//end of req.on()
+
 
     };//edn of POST method
 };
+
+
+
+const server = http.createServer(requestListener);
+server.listen( process.env.PORT || 3005);
