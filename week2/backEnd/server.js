@@ -22,6 +22,26 @@ const requestListener = async (req, res) => {
     if( (req.url == '/' || req.url == '/posts') && req.method == 'GET' ){
         const allPosts = await PostsModel.find();
         success(res, allPosts);
+    }else if(req.url.startsWith('/posts/') && req.method == 'GET'){
+        let keyWord = req.url.split('/').pop().trim();
+        // console.log(keyWord);
+        // console.log(typeof(keyWord));
+        let metContent;
+        if(keyWord){
+            // console.log(keyWord);
+            // console.log(typeof(keyWord));
+            // keyWord += '';   
+            // $regex:  String variable 不能包在 /   /   之內, 測試條件會不成立 
+            metContent = await PostsModel.find( {"userContent":{$regex:keyWord, $options:"i"}});
+            // console.log(metContent);
+            success(res, metContent);
+            metContent = '';
+            
+
+        }else{
+            error(res,`${keyWord} finds nothing!!`);
+        }
+
     }else if(req.url == '/posts' && req.method == 'POST'){
         req.on('end', async () => {
             try {
