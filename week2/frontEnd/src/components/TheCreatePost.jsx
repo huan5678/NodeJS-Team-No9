@@ -1,6 +1,6 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import axios from "axios";
+import { Formik, Form, Field } from 'formik';
 import * as yup from "yup";
 
 const schema = yup.object({
@@ -10,100 +10,156 @@ const schema = yup.object({
   imgUrl: yup.string(),
 }).required();
 
-function TheCreatePost() {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm({
-    mode: 'onBlur',
-    reValidateMode: 'onChange',
-    resolver: yupResolver(schema),
-  });
+const baseUrl = 'http://localhost:3000';
 
-  const onSubmit = (data) => {
-    // 將form的資料轉換成API的物件格式
-    const submitData = {
-      userName: data.userName?.trim(),
-      userContent: data.userContent?.trim(),
-      userPhoto: data.userPhoto?.trim(),
-      imgUrl: data.imgUrl?.trim(),
-    };
-    console.log(submitData);
+function TheCreatePost ()
+{
+  const handlePostSubmit = (data) =>
+  {
+    // const submitData = {
+    //   userName: data.userName?.trim(),
+    //   userContent: data.userContent?.trim(),
+    //   userPhoto: data.userPhoto?.trim(),
+    //   imgUrl: data.imgUrl?.trim(),
+    // };
+    console.log(data);
+    const url = `${baseUrl}/`;
+    axios.post(url, data).then(res =>
+    {
+      console.log(res);
+    }).catch(err => console.log(err));
   };
 
-  // const watchAllFields = watch();
-  useEffect(() => {
-    const watchUserName = watch("userName");
-    const watchUserContent = watch("userContent");
-    const watchUserPhoto = watch("userPhoto");
-    const watchimgUrl = watch("imgUrl");
-    console.log(watchUserName);
-    console.log(watchUserContent);
-    console.log(watchUserPhoto);
-    console.log(watchimgUrl);
-    // const formData = watch((value, { name, type }) => console.log(value, name, type));
-  }, [watch]);
   return(
     <section className="card p-8">
-      <form action="" onSubmit={handleSubmit(onSubmit)}>
-        <div className="mx-auto space-y-1">
-          <label htmlFor="postContent">貼文內容
-          <textarea
-            id="postContent"
-            type="text"
-            name="postContent"
-            rows="6"
-            cols="45"
-            className="form-control py-3 px-6"
-            placeholder="輸入您的貼文內容"
-            />
-          </label>
-          <label htmlFor="imgUrl">
-            貼文圖片
-            <div className="flex flex-col gap-2">
-                <input
-                  id="imgUrl"
-                  name="imgUrl"
-                  { ...register('imgUrl')}
-                  className="form-control"
-                  placeholder="請輸入圖片網址"
-                />
+      <Formik
+      initialValues={{
+        userName: '',
+        userContent: '',
+        userPhoto: '',
+        imgUrl: '',
+        }}
+        validationSchema={schema}
+        onSubmit={(values) => handlePostSubmit(values)}
+      >
+        {({ errors, touched, handleSubmit, values, handleBlur, handleChange }) => (
+        <Form onSubmit={ handleSubmit }>
+          <div className="mx-auto space-y-4">
+            <div className="space-y-1">
+              <label htmlFor="userContent">
+                貼文內容
+              </label>
+                <Field name="userContent">
+                  {({ field }) => (
+                  <div className="space-y-1">
+                    <textarea
+                      id="userContent"
+                      value={values.userContent}
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      name="userContent"
+                      rows="6"
+                      cols="45"
+                      className="form-control py-3 px-6"
+                      placeholder="輸入您的貼文內容"
+                    />
+                    {
+                      errors[field.name] && touched[field.name] &&
+                      <p className="text-danger flex-none">{errors[field.name]}</p>
+                    }
+                  </div>
+                  )}
+              </Field>
             </div>
-          </label>
-          <img src="" alt="" srcSet="" />
-          <label className="block mb-2" htmlFor="userName">
-            使用者名稱
-            <div className="flex flex-col gap-2">
-              <input
-                id="userName"
-                {...register('userName')}
-                className="form-control"
-                placeholder="請輸入姓名"
-                />
-              {errors.userName && (
-                <p className="text-danger flex-none">{errors.userName.message}</p>
-              )}
+            <div className="space-y-1">
+              <label htmlFor="imgUrl">
+                貼文圖片
+              </label>
+                <Field name="imgUrl">
+                  {({ field }) => (
+                    <div className="space-y-1">
+                      <input
+                        id="imgUrl"
+                        type="text"
+                        name="imgUrl"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.imgUrl}
+                        className="form-control"
+                        placeholder="請輸入貼文圖片網址"
+                      />
+                      {
+                      errors[field.name] && touched[field.name] &&
+                      <p className="text-danger flex-none">{errors[field.name]}</p>
+                    }
+                    </div>
+                  )}
+              </Field>
+              </div>
+              {
+                values.imgUrl ? (<img src={values.imgUrl} className="border-2 rounded-lg border-black" alt="" />) : null
+            }
+            <div className="space-y-1">
+              <label className="block mb-2" htmlFor="userName">
+              使用者名稱
+              </label>
+                <Field name="userName">
+                {({ field }) => (
+                  <div className="space-y-1">
+                    <input
+                      id="userName"
+                      name="userName"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.userName}
+                      className="form-control"
+                      placeholder="請輸入使用者姓名"
+                    />
+                    {
+                      errors[field.name] && touched[field.name] &&
+                      <p className="text-danger flex-none">{errors[field.name]}</p>
+                    }
+                  </div>
+                )}
+              </Field>
             </div>
-          </label>
-          <label htmlFor="userPhoto">
-            使用者圖片
-            <div className="flex flex-col gap-2">
-              <input
-                id="userPhoto"
-                { ...register('userPhoto')}
-                className="form-control"
-                placeholder="請輸入姓名"
-              />
-              {errors.userPhoto && (
-                <p className="text-danger flex-none">{errors.userPhoto.message}</p>
-              )}
+            <div className="space-y-1">
+              <label htmlFor="userPhoto">
+                使用者圖片
+                </label>
+                <Field name="userPhoto">
+                  {({ field, }) => (
+                    <div className="space-y-1">
+                      <input
+                        id="userPhoto"
+                        name="userPhoto"
+                        value={values.userPhoto}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className="form-control"
+                        placeholder="請輸入使用者頭像圖片網址"
+                      />
+                      {
+                      errors[field.name] && touched[field.name] &&
+                      <p className="text-danger flex-none">{errors[field.name]}</p>
+                      }
+                    </div>
+                  )}
+                </Field>
             </div>
-          </label>
-          <button type="submit" className="">送出貼文</button>
-        </div>
-      </form>
+            <button type="submit" className={
+              `text-center border-black border-2 py-4
+            rounded-lg bg-info-dark text-black font-bold w-full
+            active:translate-y-1
+            hover:bg-secondary hover:text-black transition-all duration-300
+              ${errors?.userPhoto?.message ? 'bg-secondary': ''}
+              `
+            }
+            >送出貼文</button>
+            </div>
+        </Form>
+        )}
+      </Formik>
     </section>
   )
 }
