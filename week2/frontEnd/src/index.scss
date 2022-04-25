@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;700&family=Baloo+Da+2&family=Paytone+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bg-pattern {
+  @apply bg-gray bg-[length:64px_64px];
+  background-image: linear-gradient(#70707050 1px, transparent 1px),
+    linear-gradient(to right, #70707050 1px, #efece7 1px);
+}
+
+.btn {
+  @apply border-2 border-black rounded-lg w-full py-4 transition-all duration-150;
+}
+.btn:hover {
+  @apply shadow-bottom;
+}
+.btn:active {
+  @apply translate-y-1 shadow-[0px_1px_0px_#000400];
+}
+
+.form-control {
+  @apply flex flex-col w-full border-2 border-black bg-white py-4 px-6 focus-visible:outline-none;
+}
+
+.card {
+  @apply bg-white rounded-lg shadow-bottom border-2 border-black;
+}
+
+@layer components {
+  .circle {
+    @apply border border-[#707070] h-2 w-2
+    &__green {
+      @apply bg-[#83C51D];
+    }
+    &__red {
+      @apply bg-[#DE4B63];
+    }
+    &__yellow {
+      @apply bg-[#FAA722];
+    }
+  }
+}
